@@ -54,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ElevatedButton(
               child: const Text('canUse'),
               onPressed: () {
-                var canUse = canUseHid();
+                bool canUse = canUseHid();
                 print('canUse $canUse');
               },
             ),
@@ -74,7 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ElevatedButton(
           child: const Text('requestDevice'),
           onPressed: () async {
-            var requestDevice = await hid.requestDevice(RequestOptions(
+            List<HidDevice> requestDevice = await hid.requestDevice(RequestOptions(
               filters: [keyboardBacklightIds],
             ));
             print('requestDevice $requestDevice');
@@ -84,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ElevatedButton(
           child: const Text('getDevices'),
           onPressed: () async {
-            var getDevices = await hid.getDevices();
+            List<HidDevice> getDevices = await hid.getDevices();
             print('getDevices $getDevices');
             _device = getDevices[0];
           },

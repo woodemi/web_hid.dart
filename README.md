@@ -11,29 +11,74 @@ and the Flutter guide for
 [developing packages and plugins](https://flutter.dev/developing-packages). 
 -->
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+Dart wrapper via `dart:js` for https://wicg.github.io/webhid/
 
 ## Features
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
-
-## Getting started
-
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+- canUseHid
+- getDevices/requestDevice
+- open/close
+- sendFeatureReport
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
+### canUseHid
 
 ```dart
-const like = 'sample';
+bool canUse = canUseHid();
+print('canUse $canUse');
+```
+
+### getDevices/requestDevice
+
+- https://developer.mozilla.org/en-US/docs/Web/API/HID/getDevices
+
+```dart
+List<HidDevice> getDevices = await hid.getDevices();
+_device = getDevices[0];
+```
+
+- https://developer.mozilla.org/en-US/docs/Web/API/HID/requestDevice
+
+```dart
+List<HidDevice> requestDevice = await hid.requestDevice(RequestOptions(
+  filters: [keyboardBacklightIds],
+));
+_device = requestDevice[0];
+```
+
+### open/close
+
+- https://developer.mozilla.org/en-US/docs/Web/API/HIDDevice/open
+
+```dart
+_device?.open().then((value) {
+  print('device.open success');
+}).catchError((error) {
+  print('device.open $error');
+});
+```
+
+- https://developer.mozilla.org/en-US/docs/Web/API/HIDDevice/close
+
+```dart
+_device?.close().then((value) {
+  print('device.close success');
+}).catchError((error) {
+  print('device.close $error');
+});
+```
+
+### sendFeatureReport
+
+```dart
+_device?.sendFeatureReport(1, Uint32List.fromList([1, 0])).then((value) {
+  print('device.sendFeatureReport 0 success');
+}).catchError((error) {
+  print('device.sendFeatureReport $error');
+});
 ```
 
 ## Additional information
 
-TODO: Tell users more about the package: where to find more information, how to 
-contribute to the package, how to file issues, what response they can expect 
-from the package authors, and more.
+Status in Chromium: https://chromestatus.com/feature/5172464636133376
