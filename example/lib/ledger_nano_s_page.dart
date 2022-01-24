@@ -1,38 +1,35 @@
 // ignore_for_file: avoid_print
 
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:web_hid/web_hid.dart';
 
-final keyboardBacklightIds = RequestOptionsFilter(
-  vendorId: 0x05ac,
-  usage: 0x0f,
-  usagePage: 0xff00,
+final ledgerDeviceIds = RequestOptionsFilter(
+  vendorId: 0x2c97,
 );
 
-class MacKeyPage extends StatefulWidget {
-  const MacKeyPage({Key? key}) : super(key: key);
+class LedgerNanoSPage extends StatefulWidget {
+  const LedgerNanoSPage({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _MacKeyState();
+  State<StatefulWidget> createState() {
+    return _LedgerNanoSState();
+  }
 }
 
-class _MacKeyState extends State<MacKeyPage> {
+class _LedgerNanoSState extends State<LedgerNanoSPage> {
   HidDevice? _device;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Mac Key Conf'),
+        title: const Text('Ledger Nano S'),
       ),
       body: Center(
         child: Column(
           children: [
             _buildRequestGet(),
             _buildOpenClose(),
-            _buildSendFeatureReport(),
           ],
         ),
       ),
@@ -47,7 +44,7 @@ class _MacKeyState extends State<MacKeyPage> {
           child: const Text('requestDevice'),
           onPressed: () async {
             List<HidDevice> requestDevice = await hid.requestDevice(RequestOptions(
-              filters: [keyboardBacklightIds],
+              filters: [ledgerDeviceIds],
             ));
             print('requestDevice $requestDevice');
             _device = requestDevice[0];
@@ -86,34 +83,6 @@ class _MacKeyState extends State<MacKeyPage> {
               print('device.close success');
             }).catchError((error) {
               print('device.close $error');
-            });
-          },
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSendFeatureReport() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        ElevatedButton(
-          child: const Text('device.sendFeatureReport 0'),
-          onPressed: () {
-            _device?.sendFeatureReport(1, Uint32List.fromList([1, 0])).then((value) {
-              print('device.sendFeatureReport 0 success');
-            }).catchError((error) {
-              print('device.sendFeatureReport $error');
-            });
-          },
-        ),
-        ElevatedButton(
-          child: const Text('device.sendFeatureReport 512'),
-          onPressed: () {
-            _device?.sendFeatureReport(1, Uint32List.fromList([512, 0])).then((value) {
-              print('device.sendFeatureReport 512 success');
-            }).catchError((error) {
-              print('device.sendFeatureReport $error');
             });
           },
         ),

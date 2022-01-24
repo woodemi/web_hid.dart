@@ -1,5 +1,9 @@
-import 'package:flutter/material.dart';
+// ignore_for_file: avoid_print
 
+import 'package:flutter/material.dart';
+import 'package:web_hid/web_hid.dart';
+
+import 'ledger_nano_s_page.dart';
 import 'mac_key_page.dart';
 
 void main() {
@@ -34,10 +38,26 @@ class MyHomePage extends StatelessWidget {
         child: Column(
           children: [
             ElevatedButton(
+              child: const Text('canUse'),
+              onPressed: () {
+                bool canUse = canUseHid();
+                print('canUse $canUse');
+              },
+            ),
+            ElevatedButton(
               child: const Text('Mac Key Conf'),
               onPressed: () {
                 var route = MaterialPageRoute(builder: (context) {
                   return const MacKeyPage();
+                });
+                Navigator.of(context).push(route);
+              },
+            ),
+            ElevatedButton(
+              child: const Text('Ledger Nano S'),
+              onPressed: () {
+                var route = MaterialPageRoute(builder: (context) {
+                  return const LedgerNanoSPage();
                 });
                 Navigator.of(context).push(route);
               },
