@@ -1,7 +1,7 @@
 @JS()
 library web_hid;
 
-import 'dart:html' show EventTarget;
+import 'dart:html' show EventTarget, EventListener;
 import 'dart:js_util' show promiseToFuture;
 
 import 'package:js/js.dart';

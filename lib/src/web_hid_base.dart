@@ -50,6 +50,21 @@ class HidDevice extends Delegate<EventTarget> {
     return promiseToFuture(promise);
   }
 
+  Future<void> sendReport(int requestId, Object bytes) {
+    var promise = callMethod('sendReport', [requestId, bytes]);
+    return promiseToFuture(promise);
+  }
+
+  /// FIXME allowInterop
+  void subscribeInputReport(EventListener listener) {
+    delegate.addEventListener('inputreport', listener);
+  }
+
+  /// FIXME allowInterop
+  void unsubscribeInputReport(EventListener listener) {
+    delegate.removeEventListener('inputreport', listener);
+  }
+
   Future<void> sendFeatureReport(int requestId, Object bytes) {
     var promise = callMethod('sendFeatureReport', [requestId, bytes]);
     return promiseToFuture(promise);
