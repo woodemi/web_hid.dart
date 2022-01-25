@@ -73,6 +73,8 @@ _device?.close().then((value) {
 
 ### sendReport
 
+https://developer.mozilla.org/en-US/docs/Web/API/HIDDevice/sendReport
+
 ```dart
 _device?.sendReport(0, blockBytes).then((value) {
   print('device.sendReport success');
@@ -83,6 +85,8 @@ _device?.sendReport(0, blockBytes).then((value) {
 
 ### subscribeInputReport/unsubscribeInputReport
 
+https://developer.mozilla.org/en-US/docs/Web/API/HIDDevice/oninputreport
+
 ```dart
 final EventListener _handleInputReport = allowInterop((event) {}
 ...
@@ -92,6 +96,8 @@ _device?.unsubscribeInputReport(_handleInputReport);
 ```
 
 ### sendFeatureReport
+
+https://developer.mozilla.org/en-US/docs/Web/API/HIDDevice/sendFeatureReport
 
 ```dart
 _device?.sendFeatureReport(1, Uint32List.fromList([1, 0])).then((value) {
