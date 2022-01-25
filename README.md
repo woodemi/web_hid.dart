@@ -18,6 +18,8 @@ Dart wrapper via `dart:js` for https://wicg.github.io/webhid/
 - canUseHid
 - getDevices/requestDevice
 - open/close
+- sendReport
+- subscribeInputReport/unsubscribeInputReport
 - sendFeatureReport
 
 ## Usage
@@ -67,6 +69,26 @@ _device?.close().then((value) {
 }).catchError((error) {
   print('device.close $error');
 });
+```
+
+### sendReport
+
+```dart
+_device?.sendReport(0, blockBytes).then((value) {
+  print('device.sendReport success');
+}).catchError((error) {
+  print('device.sendReport $error');
+});
+```
+
+### subscribeInputReport/unsubscribeInputReport
+
+```dart
+final EventListener _handleInputReport = allowInterop((event) {}
+...
+_device?.subscribeInputReport(_handleInputReport);
+...
+_device?.unsubscribeInputReport(_handleInputReport);
 ```
 
 ### sendFeatureReport
