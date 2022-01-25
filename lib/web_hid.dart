@@ -3,6 +3,7 @@ library web_hid;
 
 import 'dart:html' show EventTarget, EventListener;
 import 'dart:js_util' show promiseToFuture;
+import 'dart:typed_data';
 
 import 'package:js/js.dart';
 

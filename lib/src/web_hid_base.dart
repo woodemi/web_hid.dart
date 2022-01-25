@@ -50,8 +50,8 @@ class HidDevice extends Delegate<EventTarget> {
     return promiseToFuture(promise);
   }
 
-  Future<void> sendReport(int requestId, Object bytes) {
-    var promise = callMethod('sendReport', [requestId, bytes]);
+  Future<void> sendReport(int requestId, TypedData data) {
+    var promise = callMethod('sendReport', [requestId, data]);
     return promiseToFuture(promise);
   }
 
@@ -65,8 +65,8 @@ class HidDevice extends Delegate<EventTarget> {
     delegate.removeEventListener('inputreport', listener);
   }
 
-  Future<void> sendFeatureReport(int requestId, Object bytes) {
-    var promise = callMethod('sendFeatureReport', [requestId, bytes]);
+  Future<void> sendFeatureReport(int requestId, TypedData data) {
+    var promise = callMethod('sendFeatureReport', [requestId, data]);
     return promiseToFuture(promise);
   }
 }
