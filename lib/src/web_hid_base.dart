@@ -4,7 +4,8 @@ class Hid extends Delegate<Object> {
   Hid._(delegate) : super(delegate);
 
   Future<List<HidDevice>> requestDevice([RequestOptions? options]) {
-    var promise = callMethod('requestDevice', [options ?? RequestOptions(filters: [])]);
+    var promise =
+        callMethod('requestDevice', [options ?? RequestOptions(filters: [])]);
     return promiseToFuture(promise).then((value) {
       return (value as List).map((e) => HidDevice._(e)).toList();
     });
@@ -49,6 +50,8 @@ class HidDevice extends Delegate<EventTarget> {
     var promise = callMethod('close');
     return promiseToFuture(promise);
   }
+
+  bool get opened => getProperty('opened');
 
   Future<void> sendReport(int requestId, TypedData data) {
     var promise = callMethod('sendReport', [requestId, data]);
