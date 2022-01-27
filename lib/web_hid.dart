@@ -19,7 +19,7 @@ bool canUseHid() => _hid != null;
 Hid? _instance;
 Hid get hid {
   if (_hid != null) {
-    return _instance ??= Hid._(_hid);
+    return _instance ??= Hid._(_hid!);
   }
   throw 'navigator.hid unavailable';
 }

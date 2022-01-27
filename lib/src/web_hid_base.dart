@@ -1,7 +1,7 @@
 part of '../web_hid.dart';
 
-class Hid extends Delegate<Object> {
-  Hid._(delegate) : super(delegate);
+class Hid extends Delegate<EventTarget> {
+  Hid._(EventTarget delegate) : super(delegate);
 
   Future<List<HidDevice>> requestDevice([RequestOptions? options]) {
     var promise =
@@ -16,6 +16,22 @@ class Hid extends Delegate<Object> {
     return promiseToFuture(promise).then((value) {
       return (value as List).map((e) => HidDevice._(e)).toList();
     });
+  }
+
+  void subscribeConnect(EventListener listener) {
+    delegate.addEventListener('connect', listener);
+  }
+
+  void unsubscribeConnect(EventListener listener) {
+    delegate.removeEventListener('connect', listener);
+  }
+
+  void subscribeDisconnect(EventListener listener) {
+    delegate.addEventListener('disconnect', listener);
+  }
+
+  void unsubscribeDisconnect(EventListener listener) {
+    delegate.removeEventListener('disconnect', listener);
   }
 }
 
