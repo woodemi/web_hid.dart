@@ -1,38 +1,58 @@
 part of '../web_hid.dart';
 
-class Hid extends Delegate<EventTarget> {
-  Hid._(EventTarget delegate) : super(delegate);
+class Hid implements InteropWrapper<_Hid> {
+  final _Hid _interop;
+
+  Hid._(this._interop);
 
   Future<List<HidDevice>> requestDevice([RequestOptions? options]) {
-    var promise =
-        callMethod('requestDevice', [options ?? RequestOptions(filters: [])]);
+    var promise = _interop.requestDevice(options ?? RequestOptions(filters: []));
     return promiseToFuture(promise).then((value) {
       return (value as List).map((e) => HidDevice._(e)).toList();
     });
   }
 
   Future<List<HidDevice>> getDevices() {
-    var promise = callMethod('getDevices');
+    var promise = _interop.getDevices();
     return promiseToFuture(promise).then((value) {
       return (value as List).map((e) => HidDevice._(e)).toList();
     });
   }
 
+  /// FIXME allowInterop
   void subscribeConnect(EventListener listener) {
-    delegate.addEventListener('connect', listener);
+    _interop.addEventListener('connect', listener);
   }
 
+  /// FIXME allowInterop
   void unsubscribeConnect(EventListener listener) {
-    delegate.removeEventListener('connect', listener);
+    _interop.removeEventListener('connect', listener);
   }
 
+  /// FIXME allowInterop
   void subscribeDisconnect(EventListener listener) {
-    delegate.addEventListener('disconnect', listener);
+    _interop.addEventListener('disconnect', listener);
   }
 
+  /// FIXME allowInterop
   void unsubscribeDisconnect(EventListener listener) {
-    delegate.removeEventListener('disconnect', listener);
+    _interop.removeEventListener('disconnect', listener);
   }
+}
+
+@JS('HID')
+class _Hid implements Interop {
+  /// https://developer.mozilla.org/en-US/docs/Web/API/HID/requestDevice
+  external Object requestDevice(Object options);
+
+  /// https://developer.mozilla.org/en-US/docs/Web/API/HID/getDevices
+  external Object getDevices();
+
+  /// https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
+  external void addEventListener(String type, EventListener? listener, [bool? useCapture]);
+
+  /// https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/removeEventListener
+  external void removeEventListener(String type, EventListener? listener, [bool? useCapture]);
 }
 
 @JS()

@@ -12,7 +12,7 @@ import 'src/js_facade.dart';
 part 'src/web_hid_base.dart';
 
 @JS('navigator.hid')
-external EventTarget? get _hid;
+external _Hid? get _hid;
 
 bool canUseHid() => _hid != null;
 
