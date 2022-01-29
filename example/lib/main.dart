@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:web_hid/web_hid.dart';
 
 import 'ledger_nano_s_page.dart';
+import 'logic_keyboard_page.dart';
 import 'mac_key_page.dart';
 
 void main() {
@@ -58,6 +59,15 @@ class MyHomePage extends StatelessWidget {
               onPressed: () {
                 var route = MaterialPageRoute(builder: (context) {
                   return const LedgerNanoSPage();
+                });
+                Navigator.of(context).push(route);
+              },
+            ),
+            ElevatedButton(
+              child: const Text('Logic Keyboard Conf'),
+              onPressed: () {
+                var route = MaterialPageRoute(builder: (context) {
+                  return const LogicKeyboardPage();
                 });
                 Navigator.of(context).push(route);
               },
