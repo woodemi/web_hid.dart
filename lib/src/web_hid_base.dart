@@ -74,38 +74,64 @@ class RequestOptionsFilter {
   });
 }
 
-class HidDevice extends Delegate<EventTarget> {
-  HidDevice._(EventTarget delegate) : super(delegate);
+class HidDevice implements InteropWrapper<_HidDevice> {
+  final _HidDevice _interop;
+
+  HidDevice._(this._interop);
 
   Future<void> open() {
-    var promise = callMethod('open');
+    var promise = _interop.open();
     return promiseToFuture(promise);
   }
 
   Future<void> close() {
-    var promise = callMethod('close');
+    var promise = _interop.close();
     return promiseToFuture(promise);
   }
 
-  bool get opened => getProperty('opened');
+  bool get opened => _interop.opened;
 
   Future<void> sendReport(int requestId, TypedData data) {
-    var promise = callMethod('sendReport', [requestId, data]);
+    var promise = _interop.sendReport(requestId, data);
     return promiseToFuture(promise);
   }
 
   /// FIXME allowInterop
   void subscribeInputReport(EventListener listener) {
-    delegate.addEventListener('inputreport', listener);
+    _interop.addEventListener('inputreport', listener);
   }
 
   /// FIXME allowInterop
   void unsubscribeInputReport(EventListener listener) {
-    delegate.removeEventListener('inputreport', listener);
+    _interop.removeEventListener('inputreport', listener);
   }
 
   Future<void> sendFeatureReport(int requestId, TypedData data) {
-    var promise = callMethod('sendFeatureReport', [requestId, data]);
+    var promise = _interop.sendFeatureReport(requestId, data);
     return promiseToFuture(promise);
   }
+}
+
+@JS('HIDDevice')
+class _HidDevice implements Interop {
+  /// https://developer.mozilla.org/en-US/docs/Web/API/HIDDevice/open
+  external Object open();
+
+  /// https://developer.mozilla.org/en-US/docs/Web/API/HIDDevice/close
+  external Object close();
+
+  /// https://developer.mozilla.org/en-US/docs/Web/API/HIDDevice/opened
+  external bool get opened;
+
+  /// https://developer.mozilla.org/en-US/docs/Web/API/HIDDevice/sendReport
+  external Object sendReport(int requestId, TypedData data);
+
+  /// https://developer.mozilla.org/en-US/docs/Web/API/HIDDevice/sendFeatureReport
+  external Object sendFeatureReport(int requestId, TypedData data);
+
+  /// https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
+  external void addEventListener(String type, EventListener? listener, [bool? useCapture]);
+
+  /// https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/removeEventListener
+  external void removeEventListener(String type, EventListener? listener, [bool? useCapture]);
 }
