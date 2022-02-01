@@ -27,6 +27,10 @@ Uint8List transport(
 
 final getAppAndVersion = transport(0xb0, 0x01, 0x00, 0x00);
 
+List<int> data = List.empty(growable: true);
+int lastBlockSeqId = -1;
+int dataLength = -1;
+
 class LedgerNanoSPage extends StatefulWidget {
   const LedgerNanoSPage({Key? key}) : super(key: key);
 
@@ -65,7 +69,8 @@ class _LedgerNanoSState extends State<LedgerNanoSPage> {
         ElevatedButton(
           child: const Text('requestDevice'),
           onPressed: () async {
-            List<HidDevice> requestDevice = await hid.requestDevice(RequestOptions(
+            List<HidDevice> requestDevice =
+                await hid.requestDevice(RequestOptions(
               filters: [ledgerDeviceIds],
             ));
             print('requestDevice $requestDevice');
@@ -173,7 +178,7 @@ const packetSize = 64;
 final channel = Random().nextInt(0xffff);
 const Tag = 0x05;
 
-/// 
+///
 /// +---------+--------+------------+-----------+
 /// | channel |  Tag   | blockSeqId | blockData |
 /// +---------+--------+------------+-----------+
@@ -206,12 +211,25 @@ Uint8List parseBlock(ByteData block) {
   if (readBuffer.getUint8() != Tag) {
     throw ArgumentError('Tag');
   }
-  if (readBuffer.getUint16(endian: Endian.big) != 0) {
+  int blockSeqId = readBuffer.getUint16(endian: Endian.big);
+  if (lastBlockSeqId + 1 != blockSeqId) {
     throw ArgumentError('blockSeqId');
   }
+  lastBlockSeqId = blockSeqId;
 
-  var dataLength = readBuffer.getUint16(endian: Endian.big);
-  var data = readBuffer.getUint8List(dataLength);
+  if (lastBlockSeqId == 0) {
+    dataLength = readBuffer.getUint16(endian: Endian.big);
+  }
 
+  // 64 bytes - 7 bytes
+  if (dataLength > 57) {
+    if (lastBlockSeqId == 0) {
+      data.addAll(readBuffer.getUint8List(57));
+    } else {
+      data.addAll(readBuffer.getUint8List(dataLength - (57 * lastBlockSeqId)));
+    }
+  } else {
+    data.addAll(readBuffer.getUint8List(dataLength));
+  }
   return Uint8List.fromList(data);
 }
