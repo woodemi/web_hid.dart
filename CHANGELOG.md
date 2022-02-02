@@ -1,3 +1,7 @@
+## 0.2.1+1
+
+- Fix README with onconnect/ondisconnect APIs
+
 ## 0.2.1
 
 - Fix addEventListener/removeEventListener on non-Native type JS-interop class
