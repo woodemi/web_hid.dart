@@ -4,6 +4,8 @@ Dart wrapper via `dart:js` for https://wicg.github.io/webhid/
 
 - canUseHid
 - getDevices/requestDevice
+- subscribeConnect/unsubscribeConnect
+- subscribeDisconnect/unsubscribeDisconnect
 - open/close
 - sendReport
 - subscribeInputReport/unsubscribeInputReport
@@ -34,6 +36,30 @@ List<HidDevice> requestDevice = await hid.requestDevice(RequestOptions(
   filters: [keyboardBacklightIds],
 ));
 _device = requestDevice[0];
+```
+
+### subscribeConnect/unsubscribeConnect
+
+https://developer.mozilla.org/en-US/docs/Web/API/HID/onconnect
+
+```dart
+final EventListener _handleConnect = allowInterop((Event event) {}
+...
+hid.subscribeConnect(_handleConnect);
+...
+hid.unsubscribeConnect(_handleConnect);
+```
+
+### subscribeDisconnect/unsubscribeDisconnect
+
+https://developer.mozilla.org/en-US/docs/Web/API/HID/ondisconnect
+
+```dart
+final EventListener _handleDisconnect = allowInterop((Event event) {}
+...
+hid.subscribeDisconnect(_handleDisconnect);
+...
+hid.unsubscribeDisconnect(_handleDisconnect);
 ```
 
 ### open/close
