@@ -13,12 +13,9 @@ abstract class Delegate<T extends Object> {
   Delegate(this._delegate);
 
   Prop getProperty<Prop>(String name) => js_util.getProperty(_delegate, name);
+  Prop getObjectProperty<Prop>(Object o, String name) => js_util.getProperty(o, name);
+
+  Prop setProperty<Prop>(String name, Prop value) => js_util.setProperty(_delegate, name, value);
 
   Result callMethod<Result>(String method, [List<Object> args = const []]) => js_util.callMethod(_delegate, method, args);
 }
-
-/// FIXME https://github.com/flutter/flutter/issues/97357
-/// Dummy class for type inference
-abstract class Interop {}
-
-abstract class InteropWrapper<T extends Interop> {}

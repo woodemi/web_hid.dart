@@ -1,58 +1,50 @@
 part of '../web_hid.dart';
 
-class Hid implements InteropWrapper<_Hid> {
-  final _Hid _interop;
-
-  Hid._(this._interop);
+class Hid extends Delegate<EventTarget> {
+  Hid._(EventTarget delegate) : super(delegate);
+  late EventListener _connectListener;
+  late EventListener _disconnectListener;
 
   Future<List<HidDevice>> requestDevice([RequestOptions? options]) {
-    var promise = _interop.requestDevice(options ?? RequestOptions(filters: []));
+    var promise =
+    callMethod('requestDevice', [options ?? RequestOptions(filters: [])]);
     return promiseToFuture(promise).then((value) {
       return (value as List).map((e) => HidDevice._(e)).toList();
     });
   }
 
   Future<List<HidDevice>> getDevices() {
-    var promise = _interop.getDevices();
+    var promise = callMethod('getDevices');
     return promiseToFuture(promise).then((value) {
       return (value as List).map((e) => HidDevice._(e)).toList();
     });
   }
 
-  /// FIXME allowInterop
-  void subscribeConnect(EventListener listener) {
-    _interop.addEventListener('connect', listener);
+  void subscribeConnect(Function(HidDevice) listener) {
+    _connectListener = allowInterop((event){
+      var e = getObjectProperty(event, 'device');
+      listener(HidDevice._(e));
+    });
+    setProperty('onconnect', _connectListener);
   }
 
-  /// FIXME allowInterop
-  void unsubscribeConnect(EventListener listener) {
-    _interop.removeEventListener('connect', listener);
+  void unsubscribeConnect(Function() listener) {
+    setProperty('onconnect', null);
+    listener();
   }
 
-  /// FIXME allowInterop
-  void subscribeDisconnect(EventListener listener) {
-    _interop.addEventListener('disconnect', listener);
+  void subscribeDisconnect(Function(HidDevice) listener) {
+    _disconnectListener = allowInterop((event){
+      var e = getObjectProperty(event, 'device');
+      listener(HidDevice._(e));
+    });
+    setProperty('ondisconnect', _disconnectListener);
   }
 
-  /// FIXME allowInterop
-  void unsubscribeDisconnect(EventListener listener) {
-    _interop.removeEventListener('disconnect', listener);
+  void unsubscribeDisconnect(Function() listener) {
+    setProperty('ondisconnect', null);
+    listener();
   }
-}
-
-@JS('HID')
-class _Hid implements Interop {
-  /// https://developer.mozilla.org/en-US/docs/Web/API/HID/requestDevice
-  external Object requestDevice(Object options);
-
-  /// https://developer.mozilla.org/en-US/docs/Web/API/HID/getDevices
-  external Object getDevices();
-
-  /// https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
-  external void addEventListener(String type, EventListener? listener, [bool? useCapture]);
-
-  /// https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/removeEventListener
-  external void removeEventListener(String type, EventListener? listener, [bool? useCapture]);
 }
 
 @JS()
@@ -72,40 +64,4 @@ class RequestOptionsFilter {
     int usage,
     int usagePage,
   });
-}
-
-class HidDevice extends Delegate<EventTarget> {
-  HidDevice._(EventTarget delegate) : super(delegate);
-
-  Future<void> open() {
-    var promise = callMethod('open');
-    return promiseToFuture(promise);
-  }
-
-  Future<void> close() {
-    var promise = callMethod('close');
-    return promiseToFuture(promise);
-  }
-
-  bool get opened => getProperty('opened');
-
-  Future<void> sendReport(int requestId, TypedData data) {
-    var promise = callMethod('sendReport', [requestId, data]);
-    return promiseToFuture(promise);
-  }
-
-  /// FIXME allowInterop
-  void subscribeInputReport(EventListener listener) {
-    delegate.addEventListener('inputreport', listener);
-  }
-
-  /// FIXME allowInterop
-  void unsubscribeInputReport(EventListener listener) {
-    delegate.removeEventListener('inputreport', listener);
-  }
-
-  Future<void> sendFeatureReport(int requestId, TypedData data) {
-    var promise = callMethod('sendFeatureReport', [requestId, data]);
-    return promiseToFuture(promise);
-  }
 }

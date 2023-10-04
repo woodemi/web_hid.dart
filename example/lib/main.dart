@@ -1,10 +1,8 @@
 // ignore_for_file: avoid_print, avoid_web_libraries_in_flutter
 
-import 'dart:html' show Event, EventListener;
-import 'dart:js' show allowInterop;
-
 import 'package:flutter/material.dart';
 import 'package:web_hid/web_hid.dart';
+import 'package:web_hid_example/joy_con_page.dart';
 
 import 'ledger_nano_s_page.dart';
 import 'mac_key_page.dart';
@@ -47,44 +45,77 @@ class MyHomePage extends StatelessWidget {
                 print('canUse $canUse');
               },
             ),
+            const SizedBox(height: 5.0,),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
                   child: const Text('hid.subscribeConnect'),
                   onPressed: () {
-                    hid.subscribeConnect(_handleConnect);
+                    hid.subscribeConnect((device){
+                      print('HID connected: ${device.getProperty('productName')}');
+                    });
                     print('hid.subscribeConnect success');
                   },
                 ),
+                const SizedBox(width: 5.0,),
                 ElevatedButton(
                   child: const Text('hid.unsubscribeConnect'),
                   onPressed: () {
-                    hid.unsubscribeConnect(_handleConnect);
+                    hid.unsubscribeConnect((){
+                      print('hid.unsubscribeConnect finish');
+                    });
                     print('hid.unsubscribeConnect success');
                   },
                 ),
               ],
             ),
+            const SizedBox(height: 5.0,),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
                   child: const Text('hid.subscribeDisconnect'),
                   onPressed: () {
-                    hid.subscribeDisconnect(_handleDisconnect);
+                    hid.subscribeDisconnect((device){
+                      print('HID disconnected: ${device.getProperty('productName')}');
+                    });
                     print('hid.subscribeDisconnect success');
                   },
                 ),
+                const SizedBox(width: 5.0,),
                 ElevatedButton(
                   child: const Text('hid.unsubscribeDisconnect'),
                   onPressed: () {
-                    hid.unsubscribeDisconnect(_handleDisconnect);
+                    hid.unsubscribeDisconnect((){
+                      print('hid.unsubscribeDisconnect finish');
+                    });
                     print('hid.unsubscribeDisconnect success');
                   },
                 ),
               ],
             ),
+            const SizedBox(height: 5.0,),
+            ElevatedButton(
+              child: const Text('Request Device'),
+              onPressed: () async {
+
+                List<HidDevice> list = await hid.requestDevice(
+                    RequestOptions(
+                      filters: [
+                      ],
+                    )
+                );
+                if (list.isEmpty) {
+                  return;
+                }
+                var device = list[0];
+                if(!device.opened) {
+                  device.open();
+                }
+              },
+            ),
+            const SizedBox(height: 5.0,),
             ElevatedButton(
               child: const Text('Mac Key Conf'),
               onPressed: () {
@@ -94,11 +125,22 @@ class MyHomePage extends StatelessWidget {
                 Navigator.of(context).push(route);
               },
             ),
+            const SizedBox(height: 5.0,),
             ElevatedButton(
               child: const Text('Ledger Nano S'),
               onPressed: () {
                 var route = MaterialPageRoute(builder: (context) {
                   return const LedgerNanoSPage();
+                });
+                Navigator.of(context).push(route);
+              },
+            ),
+            const SizedBox(height: 5.0,),
+            ElevatedButton(
+              child: const Text('Joy Con'),
+              onPressed: () {
+                var route = MaterialPageRoute(builder: (context) {
+                  return const JoyConPage();
                 });
                 Navigator.of(context).push(route);
               },
@@ -109,11 +151,3 @@ class MyHomePage extends StatelessWidget {
     );
   }
 }
-
-final EventListener _handleConnect = allowInterop((Event event) {
-  print('_handleConnect $event');
-});
-
-final EventListener _handleDisconnect = allowInterop((Event event) {
-  print('_handleDisconnect $event');
-});
