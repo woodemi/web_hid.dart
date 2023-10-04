@@ -43,11 +43,13 @@ _device = requestDevice[0];
 https://developer.mozilla.org/en-US/docs/Web/API/HID/onconnect
 
 ```dart
-final EventListener _handleConnect = allowInterop((Event event) {}
+hid.subscribeConnect((device){
+  print('HID connected: ${device.getProperty('productName')}');
+});
 ...
-hid.subscribeConnect(_handleConnect);
-...
-hid.unsubscribeConnect(_handleConnect);
+hid.unsubscribeConnect((){
+  print('hid.unsubscribeConnect finish');
+});
 ```
 
 ### subscribeDisconnect/unsubscribeDisconnect
@@ -55,11 +57,13 @@ hid.unsubscribeConnect(_handleConnect);
 https://developer.mozilla.org/en-US/docs/Web/API/HID/ondisconnect
 
 ```dart
-final EventListener _handleDisconnect = allowInterop((Event event) {}
+hid.subscribeDisconnect((device){
+print('HID disconnected: ${device.getProperty('productName')}');
+});
 ...
-hid.subscribeDisconnect(_handleDisconnect);
-...
-hid.unsubscribeDisconnect(_handleDisconnect);
+hid.unsubscribeDisconnect((){
+print('hid.unsubscribeDisconnect finish');
+});
 ```
 
 ### open/close
@@ -101,11 +105,13 @@ _device?.sendReport(0, blockBytes).then((value) {
 https://developer.mozilla.org/en-US/docs/Web/API/HIDDevice/oninputreport
 
 ```dart
-final EventListener _handleInputReport = allowInterop((event) {}
+_device?.subscribeInputReport((data) {
+  print('_device?.subscribeInputReport receive');
+});
 ...
-_device?.subscribeInputReport(_handleInputReport);
-...
-_device?.unsubscribeInputReport(_handleInputReport);
+_device?.unsubscribeInputReport((){
+  print('_device?.unsubscribeInputReport finish');
+});
 ```
 
 ### sendFeatureReport
