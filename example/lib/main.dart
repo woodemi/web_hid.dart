@@ -45,7 +45,6 @@ class MyHomePage extends StatelessWidget {
                 print('canUse $canUse');
               },
             ),
-            const SizedBox(height: 5.0,),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -58,7 +57,6 @@ class MyHomePage extends StatelessWidget {
                     print('hid.subscribeConnect success');
                   },
                 ),
-                const SizedBox(width: 5.0,),
                 ElevatedButton(
                   child: const Text('hid.unsubscribeConnect'),
                   onPressed: () {
@@ -70,7 +68,6 @@ class MyHomePage extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 5.0,),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -83,7 +80,6 @@ class MyHomePage extends StatelessWidget {
                     print('hid.subscribeDisconnect success');
                   },
                 ),
-                const SizedBox(width: 5.0,),
                 ElevatedButton(
                   child: const Text('hid.unsubscribeDisconnect'),
                   onPressed: () {
@@ -95,27 +91,6 @@ class MyHomePage extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 5.0,),
-            ElevatedButton(
-              child: const Text('Request Device'),
-              onPressed: () async {
-
-                List<HidDevice> list = await hid.requestDevice(
-                    RequestOptions(
-                      filters: [
-                      ],
-                    )
-                );
-                if (list.isEmpty) {
-                  return;
-                }
-                var device = list[0];
-                if(!device.opened) {
-                  device.open();
-                }
-              },
-            ),
-            const SizedBox(height: 5.0,),
             ElevatedButton(
               child: const Text('Mac Key Conf'),
               onPressed: () {
@@ -125,7 +100,6 @@ class MyHomePage extends StatelessWidget {
                 Navigator.of(context).push(route);
               },
             ),
-            const SizedBox(height: 5.0,),
             ElevatedButton(
               child: const Text('Ledger Nano S'),
               onPressed: () {
@@ -135,7 +109,6 @@ class MyHomePage extends StatelessWidget {
                 Navigator.of(context).push(route);
               },
             ),
-            const SizedBox(height: 5.0,),
             ElevatedButton(
               child: const Text('Joy Con'),
               onPressed: () {

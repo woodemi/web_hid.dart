@@ -1,6 +1,6 @@
 name: web_hid
 description: A starting point for Dart libraries or applications.
-version: 0.2.1+2
+version: 0.2.1+1
 homepage: https://github.com/woodemi/web_hid.dart
 
 environment:

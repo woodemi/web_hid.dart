@@ -139,11 +139,13 @@ class _LedgerNanoSState extends State<LedgerNanoSPage> {
           },
         ),
         ElevatedButton(
+          child: const Text('device.unsubscribeInputReport'),
           onPressed: () {
-            _device?.unsubscribeInputReport((){});
+            _device?.unsubscribeInputReport((){
+              print('device.unsubscribeInputReport finish');
+            });
             print('device.unsubscribeInputReport success');
           },
-          child: const Text('device.unsubscribeInputReport'),
         ),
       ],
     );
