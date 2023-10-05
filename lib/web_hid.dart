@@ -10,7 +10,6 @@ import 'package:js/js.dart';
 import 'src/js_facade.dart';
 
 part 'src/web_hid_base.dart';
-part 'src/web_hid_device.dart';
 
 @JS('navigator.hid')
 external EventTarget? get _hid;

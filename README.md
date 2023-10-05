@@ -2,14 +2,14 @@ Dart wrapper via `dart:js` for https://wicg.github.io/webhid/
 
 ## Features
 
-- canUseHid
-- getDevices/requestDevice
-- subscribeConnect/unsubscribeConnect
-- subscribeDisconnect/unsubscribeDisconnect
-- open/close
-- sendReport
-- subscribeInputReport/unsubscribeInputReport
-- sendFeatureReport
+- [canUseHid](#canusehid)
+- [getDevices/requestDevice](#getdevicesrequestdevice)
+- [subscribeConnect/unsubscribeConnect](#subscribeconnectunsubscribeconnect)
+- [subscribeDisconnect/unsubscribeDisconnect](#subscribedisconnectunsubscribedisconnect)
+- [open/close](#openclose)
+- [sendReport](#sendreport)
+- [subscribeInputReport/unsubscribeInputReport](#subscribeinputreportunsubscribeinputreport)
+- [sendFeatureReport](#sendfeaturereport)
 
 ## Usage
 
@@ -58,11 +58,11 @@ https://developer.mozilla.org/en-US/docs/Web/API/HID/ondisconnect
 
 ```dart
 hid.subscribeDisconnect((device){
-print('HID disconnected: ${device.getProperty('productName')}');
+  print('HID disconnected: ${device.getProperty('productName')}');
 });
 ...
 hid.unsubscribeDisconnect((){
-print('hid.unsubscribeDisconnect finish');
+  print('hid.unsubscribeDisconnect finish');
 });
 ```
 
