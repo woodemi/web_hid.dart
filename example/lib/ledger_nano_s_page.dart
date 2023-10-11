@@ -1,10 +1,6 @@
-// ignore_for_file: avoid_print, avoid_web_libraries_in_flutter
+// ignore_for_file: avoid_print
 
-import 'dart:html' show EventListener;
-import 'dart:js' show allowInterop;
-import 'dart:js_util' show getProperty;
 import 'dart:math';
-import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -145,7 +141,9 @@ class _LedgerNanoSState extends State<LedgerNanoSPage> {
         ElevatedButton(
           child: const Text('device.unsubscribeInputReport'),
           onPressed: () {
-            _device?.unsubscribeInputReport(_handleInputReport);
+            _device?.unsubscribeInputReport((){
+              print('device.unsubscribeInputReport finish');
+            });
             print('device.unsubscribeInputReport success');
           },
         ),
@@ -153,9 +151,8 @@ class _LedgerNanoSState extends State<LedgerNanoSPage> {
     );
   }
 
-  final EventListener _handleInputReport = allowInterop((event) {
-    ByteData blockData = getProperty(event, 'data');
-    var data = parseBlock(blockData);
+  _handleInputReport (HIDInputReportEvent event){
+    var data = parseBlock(event.data);
 
     var readBuffer = ReadBuffer(data.buffer.asByteData());
     if (readBuffer.getUint8() != 1) {
@@ -166,7 +163,7 @@ class _LedgerNanoSState extends State<LedgerNanoSPage> {
     var versionLength = readBuffer.getUint8();
     var version = String.fromCharCodes(readBuffer.getUint8List(versionLength));
     print('$name, $version');
-  });
+  }
 }
 
 const packetSize = 64;
