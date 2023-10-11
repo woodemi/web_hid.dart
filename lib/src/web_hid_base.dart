@@ -148,7 +148,7 @@ class HIDInputReportEvent extends Delegate<Event> {
   int get reportId => getProperty('reportId');
   HidDevice get device => HidDevice._(getProperty('device'));
 
-  Uint8List rawData(){
+  Uint8List get rawData{
     List<int> dataList = [reportId];
     dataList.addAll(data.buffer.asUint8List());
     return Uint8List.fromList(dataList);
