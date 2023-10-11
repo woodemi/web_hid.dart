@@ -1,6 +1,4 @@
-
-import 'dart:typed_data';
-
+// ignore_for_file: avoid_print
 import 'package:flutter/material.dart';
 import 'package:web_hid/web_hid.dart';
 
@@ -92,8 +90,8 @@ class _JoyConState extends State<JoyCon>{
     );
   }
 
-  void _onInputReport(Uint8List data) {
-    print('onInputReport: ${data.map((e) => e.toRadixString(16).toUpperCase().padLeft(2, '0'))}');
+  void _onInputReport(HIDInputReportEvent event) {
+    print(event.toString());
   }
 
   void _refreshLED(){

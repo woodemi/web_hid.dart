@@ -43,8 +43,8 @@ _device = requestDevice[0];
 https://developer.mozilla.org/en-US/docs/Web/API/HID/onconnect
 
 ```dart
-hid.subscribeConnect((device){
-  print('HID connected: ${device.getProperty('productName')}');
+hid.subscribeConnect((event){
+  print('HID connected: ${event.device.productName}');
 });
 ...
 hid.unsubscribeConnect((){
@@ -57,8 +57,8 @@ hid.unsubscribeConnect((){
 https://developer.mozilla.org/en-US/docs/Web/API/HID/ondisconnect
 
 ```dart
-hid.subscribeDisconnect((device){
-  print('HID disconnected: ${device.getProperty('productName')}');
+hid.subscribeDisconnect((event){
+  print('HID disconnected: ${event.device.productName}');
 });
 ...
 hid.unsubscribeDisconnect((){
@@ -105,7 +105,7 @@ _device?.sendReport(0, blockBytes).then((value) {
 https://developer.mozilla.org/en-US/docs/Web/API/HIDDevice/oninputreport
 
 ```dart
-_device?.subscribeInputReport((data) {
+_device?.subscribeInputReport((event) {
   print('_device?.subscribeInputReport receive');
 });
 ...

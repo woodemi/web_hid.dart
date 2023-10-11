@@ -1,10 +1,10 @@
-
+// ignore_for_file: avoid_print
 import 'dart:typed_data';
 import 'package:web_hid/web_hid.dart';
 
 class JoyConCore {
   final HidDevice device;
-  Function(Uint8List) onInputReport;
+  Function(HIDInputReportEvent) onInputReport;
   JoyConCore({required this.device, required this.onInputReport});
 
   Future<void> open()async {

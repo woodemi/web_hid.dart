@@ -13,7 +13,7 @@ abstract class Delegate<T extends Object> {
   Delegate(this._delegate);
 
   Prop getProperty<Prop>(String name) => js_util.getProperty(_delegate, name);
-  Prop getPropertyFrom<Prop>(Object o, String name) => js_util.getProperty(o, name);
+  // Prop getPropertyFrom<Prop>(Object o, String name) => js_util.getProperty(o, name);
 
   Prop setProperty<Prop>(String name, Prop value) => js_util.setProperty(_delegate, name, value);
 

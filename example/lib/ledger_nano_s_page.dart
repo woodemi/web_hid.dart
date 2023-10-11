@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, avoid_web_libraries_in_flutter
+// ignore_for_file: avoid_print
 
 import 'dart:math';
 
@@ -151,8 +151,8 @@ class _LedgerNanoSState extends State<LedgerNanoSPage> {
     );
   }
 
-  _handleInputReport (Uint8List dataList){
-    var data = parseBlock(dataList.sublist(1).buffer.asByteData());
+  _handleInputReport (HIDInputReportEvent event){
+    var data = parseBlock(event.data);
 
     var readBuffer = ReadBuffer(data.buffer.asByteData());
     if (readBuffer.getUint8() != 1) {

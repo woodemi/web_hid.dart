@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, avoid_web_libraries_in_flutter
+// ignore_for_file: avoid_print
 
 import 'package:flutter/material.dart';
 import 'package:web_hid/web_hid.dart';
@@ -45,14 +45,23 @@ class MyHomePage extends StatelessWidget {
                 print('canUse $canUse');
               },
             ),
+            ElevatedButton(
+              child: const Text('Request Device'),
+              onPressed: () async {
+                var list = await hid.requestDevice(RequestOptions(filters: []));
+                if(list.isNotEmpty){
+                  print(list[0].toString());
+                }
+              },
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
                   child: const Text('hid.subscribeConnect'),
                   onPressed: () {
-                    hid.subscribeConnect((device){
-                      print('HID connected: ${device.getProperty('productName')}');
+                    hid.subscribeConnect((event){
+                      print('HID connected: ${event.device.productName}');
                     });
                     print('hid.subscribeConnect success');
                   },
@@ -74,8 +83,8 @@ class MyHomePage extends StatelessWidget {
                 ElevatedButton(
                   child: const Text('hid.subscribeDisconnect'),
                   onPressed: () {
-                    hid.subscribeDisconnect((device){
-                      print('HID disconnected: ${device.getProperty('productName')}');
+                    hid.subscribeDisconnect((event){
+                      print('HID disconnected: ${event.device.productName}');
                     });
                     print('hid.subscribeDisconnect success');
                   },
