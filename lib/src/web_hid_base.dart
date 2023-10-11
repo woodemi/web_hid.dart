@@ -186,7 +186,7 @@ class HIDCollectionInfo extends Delegate<Object>{
   List<HIDReportInfo> get featureReports => (getProperty('featureReports') as List).map((e) => HIDReportInfo._(e)).toList();
   @override
   String toString(){
-    String str = '';
+    String str = '  usage:     ${UsageInfo((usagePage << 16) + usage).toString()}\n';
     var input = inputReports;
     var output = outputReports;
     var feature = featureReports;
@@ -200,10 +200,7 @@ class HIDCollectionInfo extends Delegate<Object>{
       str += '  Feature ${e.toString()}';
     }
 
-    return """  usagePage: 0x${_toHexString(usagePage)}
-  usage:     0x${_toHexString(usage)}
-  type:      0x${_toHexString(type, len:1)}
-$str""";
+    return str;
   }
 }
 
@@ -215,13 +212,12 @@ class HIDReportInfo extends Delegate<Object> {
   
   @override
   String toString(){
-    String str = '';
+    String str = 'report Id: 0x${_toHexString(reportId)}\n';
     var list = items;
     for(var e in list){
       str += e.toString();
     }
-    return """report Id: 0x${_toHexString(reportId)}
-$str""";
+    return str;
   }
 }
 
@@ -282,51 +278,19 @@ class HIDReportItem extends Delegate<Object> {
     return bits.join(',');
   }
 
-  String usageAsString(int usage){
-    var usagePage = usage >>> 16;
-    var usageId = usage & 0xffff;
-    var usageString = '${_toHexString(usagePage, len:4)}:${_toHexString(usageId, len:4)}';
-
-    String usagePageName;
-
-    if (usagePage >= 0xFF00) {
-      usagePageName = 'Vendor-defined page 0x${_toHexString(usagePage, len:4)}';
-    }
-    else {
-      usagePageName = 'Unknown usage page 0x${_toHexString(usagePage, len:4)}';
-    }
-
-    // Consider any usage ID from the Button, Ordinal, Unicode, and Monitor Enumerated Values pages as valid usages.
-    if (usagePage == 0x0009) {
-      return '$usageString ($usagePageName Button $usageId)';
-    }
-    if (usagePage == 0x000A) {
-      return '$usageString ($usagePageName Instance $usageId)';
-    }
-    if (usagePage == 0x0010) {
-      return '$usageString ($usagePageName U+${_toHexString(usageId, len:4)})';
-    }
-    if (usagePage == 0x0081) {
-      return '$usageString ($usagePageName ENUM_$usageId)';
-    }
-
-    return '$usageString ($usagePageName usage 0x${_toHexString(usageId, len:4)})';
-
-  }
-
   String usagesAsString() {
     if (isRange) {
       if (usageMinimum == usageMaximum) {
-        return 'Usage: ${usageAsString(usageMinimum)}';
+        return 'Usage: ${UsageInfo(usageMinimum).toString()}';
       }
       else {
-        return 'Usages: ${usageAsString(usageMinimum)} to ${usageAsString(usageMaximum)}';
+        return 'Usages: ${UsageInfo(usageMinimum).toString()} to ${UsageInfo(usageMaximum).toString()}';
       }
     }
 
     List<String>  usageStrings = [];
     for (var usage in usages) {
-      usageStrings.add(usageAsString(usage));
+      usageStrings.add(UsageInfo(usage).toString());
     }
     if (usageStrings.length == 1) {
       return 'Usage: ${usageStrings[0]}';
@@ -415,12 +379,9 @@ class HIDReportItem extends Delegate<Object> {
 
     var exponent = (unitExponent == 0) ? '' : '10^$unitExponent*';
     var numerator = (numeratorFactors.isNotEmpty) ? numeratorFactors.join('*') : '1';
-    if (denominatorFactors.isEmpty) {
-      return 'Units: $exponent$numerator';
-    }
+    var denominator = (denominatorFactors.isNotEmpty) ? '/${denominatorFactors.join('*')}' : '';
 
-    var denominator = denominatorFactors.join('*');
-    return 'Units: $exponent$numerator/$denominator';
+    return 'Units: $exponent$numerator$denominator';
   }
 
   @override

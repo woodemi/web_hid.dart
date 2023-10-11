@@ -8,6 +8,7 @@ import 'dart:typed_data';
 import 'package:js/js.dart';
 
 import 'src/js_facade.dart';
+import 'src/usage_info.dart';
 
 part 'src/web_hid_base.dart';
 
